@@ -59,7 +59,7 @@ function showInfo(text) {
     // hideInfo(show_info,'show');
     setTimeout(() => {
         hideInfo(show_info,'show')
-      }, "10000");
+      }, 10000);
 };
 
 function hideInfo (el, hideClass) {
