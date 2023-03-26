@@ -1,16 +1,29 @@
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 let ul = document.querySelector('.list-group');
-// let deleteBtns = document.getElementsByClassName('delete-item');
 let form = document.forms['addTodoItem'];
 let inputText = form.elements['todoText'];
+let notificationAlert = document.querySelector('.notification-alert');
+
+function generateId() {
+    let id = '';
+    let words = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+    
+    for (let i = 0; i < 15; i++) {
+        let  position = Math.floor(Math.random() * words.length);
+        id += words[position];
+    }
+
+    return id;
+}
 
 function listTemplate(task) {
     // create list item
     let li = document.createElement('li');
     li.className = 'list-group-item d-flex'; 
+    li.setAttribute('data-id', task.id);
     let span = document.createElement('span');
-    span.textContent = task;
+    span.textContent = task.text;
     // create tag i fa-trash-can
     let iDelete = document.createElement('i');
     iDelete.className = 'fa-solid fa-trash-can delete-item'; 
@@ -41,41 +54,90 @@ function generateList(tasksArray) {
 }
 
 function addList (list) {
-    tasks.unshift(list);
-    ul.insertAdjacentElement('afterbegin', listTemplate(list));
+    let newTask = {
+        id: generateId(),
+        text: list
+    }
+
+    tasks.unshift(newTask);
+
+    ul.insertAdjacentElement('afterbegin', listTemplate(newTask));
     //adds to local storage
     localStorage.setItem('tasks', JSON.stringify(tasks))
+
+    message({
+        text: 'Task added success',
+        cssClass: 'alert-success',
+        timeout: 4000
+    });
 };
 
-// function setDeleteEvent () {
-//     for (let i = 0; i < deleteBtns.length; i++) {
-//         deleteBtns[i].addEventListener("click", function(e) {
-//             console.log('click');
-//         });
-//     }
-// }
-function deleteListItem (target) {
-    // Delete list item
-        // 1. Найти родителя
-        // 2. Удалить родителя
-        // 3. splice, index, indexOf, text
-    let parent = target.closest('li');
-        let index = tasks.indexOf(parent.textContent);
-        tasks.splice(index,1);
-        parent.remove();
-        //update localStorage
+function deleteListItem (id) {
+
+        for (let i = 0; i < tasks.length; i++) {
+            if ( tasks[i].id === id) {
+                tasks.splice(i,1);
+                break;
+            }
+        }
+        //update to localStorage
         localStorage.setItem('tasks', JSON.stringify(tasks))
+
+        message({
+            text: 'Task deleted success',
+            cssClass: 'alert-danger',
+            timeout: 4000
+        });
 }
 
-ul.addEventListener("click", function (e){
+function editListItem(id, newvalue) {
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+            tasks[i].text = newvalue;
+            break;
+        }
+    }
+
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+
+    message({
+        text: 'Task updated success',
+        cssClass: 'alert-success',
+        timeout: 4000
+    });
+}
+
+function message(settings) {
+    notificationAlert.classList.add(settings.cssClass);
+    notificationAlert.textContent = settings.text;
+    notificationAlert.classList.add('show');
+    setTimeout(function () {
+        notificationAlert.classList.remove('show');
+    }, settings.timeout);
+};
+
+ul.addEventListener('click', function (e){
     if (e.target.classList.contains('delete-item')) {
-       deleteListItem(e.target);
+        let parent = e.target.closest('li');
+        let id = parent.dataset.id; 
+       deleteListItem(id);
+       parent.remove();
     } 
 
     if (e.target.classList.contains('edit-item')) {
+        e.target.classList.toggle('fa-save');
+        let id = e.target.closest('li').dataset.id;
         let span = e.target.closest('li').querySelector('span');
-        span.setAtribute('contenteditable', true);
-        span.focus();
+
+        if (e.target.classList.contains('fa-save')) {
+            span.setAttribute('contenteditable', true);
+            span.focus();
+        }
+        else {
+            span.setAttribute('contenteditable', false);
+            span.blur();
+            editListItem(id, span.textContent);
+        }
 
     }
 });
