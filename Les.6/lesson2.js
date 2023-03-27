@@ -3,6 +3,7 @@ let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let ul = document.querySelector('.list-group');
 let form = document.forms['addTodoItem'];
 let inputText = form.elements['todoText'];
+let clearAllButton = document.querySelector('.clear-btn');
 let notificationAlert = document.querySelector('.notification-alert');
 
 function generateId() {
@@ -107,7 +108,17 @@ function editListItem(id, newvalue) {
     });
 }
 
+clearAllButton.addEventListener('click', function () {
+    clearList();
+    tasks = [];
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+});
+
+
+
 function message(settings) {
+    notificationAlert.classList.remove('alert-success');
+    notificationAlert.classList.remove('alert-danger');
     notificationAlert.classList.add(settings.cssClass);
     notificationAlert.textContent = settings.text;
     notificationAlert.classList.add('show');
