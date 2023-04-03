@@ -1,0 +1,26 @@
+body {
+    height: 100vh;
+    background-color: lightgray; 
+}
+
+.timer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.timer_controls {
+    display: flex;
+}
+
+#custom {
+    margin-left: auto;
+}
+
+.display {
+    margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
