@@ -181,7 +181,8 @@ let minus = function (number) {
  // multiply(3); // 12 (4 * 3) 
  // multiply(10); // 120 (12 * 10)
  function MultiplyMaker (number) {
-    result = number
+    result = number;
+
     return function (num2) {
         result *= num2;
         return result;
@@ -189,18 +190,87 @@ let minus = function (number) {
 }
 // 5. Реализовать модуль, который работает со строкой и имеет методы:
 // a. установить строку
-// i. если передано пустое значение, то установить пустую строку
-// ii. если передано число, число привести к строке
+// a1. если передано пустое значение, то установить пустую строку
+// a2. если передано число, число привести к строке
 // b. получить строку
 // c. получить длину строки
 // d. получить строку-перевертыш
 // Пример:
 // модуль.установитьСтроку(‘abcde’); модуль.получитьСтроку(); // ‘abcde’ модуль.получитьДлину(); // 5
-// 6. Создайте модуль “калькулятор”, который умеет складывать, умножать, вычитать, делить и возводить в степень. 
-// Конечное значение округлить до двух знаков после точки (значение должно храниться в обычной переменной, не в this) модуль.установитьЗначение(10); 
-// // значение = 10 модуль.прибавить(5); 
-// // значение += 5 модуль.умножить(2); 
-// // значение *= 2 модуль.узнатьЗначение(); 
-// // вывести в консоль 30 (здесь надо округлить)  
-// Также можно вызывать методы цепочкой: модуль.установитьЗначение(10).вСтепень(2).узнатьЗначение(); // 100
+let strModule = (function () {
+    let string;
 
+    function setString(str) {
+         string = str || '';
+        }
+    function getString() {
+         return string;
+        }
+    function getLength() {
+         return string.length;
+        }
+    function reverseString() {
+         return string.split('').reverse().join('');
+        }
+ 
+    return {
+        setString: setString,
+        getString: getString,
+        getLength: getLength,
+        reverseString: reverseString,
+    };
+})();
+// 6. Создайте модуль “калькулятор”, который умеет складывать, умножать, вычитать, делить и возводить в степень. 
+// Конечное значение округлить до двух знаков после точки (значение должно храниться в обычной переменной, не в this) 
+// модуль.установитьЗначение(10); // значение = 10 
+// модуль.прибавить(5); // значение += 5 
+// модуль.умножить(2); // значение *= 2 
+// модуль.узнатьЗначение(); // вывести в консоль 30 (здесь надо округлить)  
+// Также можно вызывать методы цепочкой: модуль.установитьЗначение(10).вСтепень(2).узнатьЗначение(); // 100
+let calculator = (function () {
+    let result;
+
+    function setValue(num) {
+        result = num;
+        return this;
+    }
+
+    function getResult () {
+        console.log(result.toFixed(2));
+    }
+
+    function sum(num) {
+        result += num;
+        return this;
+    }
+
+    function minus(num){
+        result -= num;
+        return this;
+    }
+
+    function mul(num) {
+        result *= num;
+        return this;
+    }
+
+    function divide(num) {
+        result /= num;
+        return this;
+    }
+
+    function expon(exp) {
+            result = result**exp;
+        return this;
+    }
+
+    return {
+        setValue: setValue,
+        getResult: getResult,
+        sum: sum,
+        minus: minus,
+        mul: mul,
+        divide: divide,
+        expon: expon,
+    };
+})();
