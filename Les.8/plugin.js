@@ -1,5 +1,7 @@
 // Timer
 const buttons = document.querySelectorAll('[data-time]');
+const form = document.querySelector('.form');
+const input = document.querySelector('.input');
 
 const timer = (function () {
 
@@ -14,9 +16,10 @@ const timer = (function () {
         if (settings.alarmSound) {
             alarmSound =  new Audio(settings.alarmSound);
         }
+        return this;
     }
 
-    function start(seconds){ 
+    function start(seconds) { 
         if (!timerDisplay || !endTime) return console.log('Please init module first');
         if (!seconds || typeof seconds !== 'number') return console.log('Please provide seconds');
 
@@ -44,13 +47,29 @@ const timer = (function () {
 
             displayTimeLeft(secondsLeft);
         }, 1000);
+        return this;
     }
 
     function displayTimeLeft(seconds) {
-        const minutes = Math.floor(seconds / 60);
+        let days = Math.floor(seconds / 3600 / 24);
+        const hours = Math.floor(seconds / 3600 ) - days * 24;
+        const minutes = Math.floor(seconds / 60) - days * 24 * 60 - hours * 60;
         const reminderSeconds = seconds % 60;
+        if (days) {
+            if (days % 100 >= 11 && days % 100 <= 14) {
+                    days += " дней ";    
+                } else if (days % 10 == 1) {
+                    days += ' день ';
+                } else if (days % 10 == 2 || days % 10 == 3 || days % 10 == 4) {
+                    days += ' дня ';
+                } else {
+                    days += ' дней '
+                }   
+            } else {
+            days = '';
+        };
 
-        const display = `${minutes}:${reminderSeconds < 10 ? '0' : ''}${reminderSeconds}`;
+        const display = `${days}${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${reminderSeconds < 10 ? '0' : ''}${reminderSeconds}`;
         document.title = display;
         timerDisplay.textContent =  display;
     }
@@ -64,7 +83,7 @@ const timer = (function () {
     }
 
     function stop() {
-
+        clearInterval(countdown);
     }
 
     function playSound() {
@@ -92,4 +111,13 @@ function startTimer(e) {
     timer.start(seconds);
 }
 
+function startTimerBySubmit(e) {
+    e.preventDefault();
+    const seconds = input.value * 60;
+    timer.start(seconds);
+    input.value = '';
+    input.blur();
+}
+
 buttons.forEach(btn => btn.addEventListener('click', startTimer));
+form.addEventListener('submit', startTimerBySubmit);
