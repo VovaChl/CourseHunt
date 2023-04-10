@@ -77,3 +77,44 @@ let oleg1 = Object.create(objPrototype, {
     firstName: {value: 'Oleg'},
     lastName: {value: 'Highlex'},
 });
+
+
+// ES6 classes
+
+class Persone1 {
+    // конструктор запускается при созданнии экземпляра
+    constructor(firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    //методы
+    greeteng() {
+        return `Hello there ${this.firstName} ${this.lastName}}`
+    }
+
+    //статический метод, только для самого класса и внутренней работы
+    static sumNumbers(x, y) {
+        return x + y;
+    }
+}
+
+const Vova1 = new Persone1('Vova', 'Ivanov');
+Vova1.sumNumbers(1,2) // error
+Persone1.sumNumbers(1,2) // 3
+
+// наследование классов ES6
+class Customer1 extends Persone1 {
+    constructor(firstName, lastName, phone, membership) {
+        super(firstName, lastName); // вместо call, свойства и методы родителя
+
+        this.phone = phone;
+        this.membership = membership;
+    }
+
+    getMembership() {
+        return this.membership;
+    }
+}
+
+const Customer1 = new Customer1('Vova', 'Ivanov', '8-982-888-88-88', 'Standart');
