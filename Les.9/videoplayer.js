@@ -37,7 +37,7 @@ class VideoPlayer {
         this.video[e.target.name] = e.target.value;
     }
 
-    skip() {
+    skip(e) {
         // time skip
         this.video.currentTime += parseFloat(e.target.dataset.skip);
     }
