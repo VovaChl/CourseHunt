@@ -12,6 +12,7 @@ searchInput.addEventListener('keyup', (e) => {
 
     if(userText !== '') {
         // Make http request
+        ui.showSpinner();
         github.getUser(userText)
             .then(user => {
                 if(user.message === 'Not Found') {
@@ -21,6 +22,7 @@ searchInput.addEventListener('keyup', (e) => {
                     ui.clearProfile();
                 } else {
                     // Show profile
+                    ui.clearProfile();
                     ui.showProfile(user);
                     ui.clearAlert();
                 }

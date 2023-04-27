@@ -4,6 +4,11 @@ class UI {
         this.search_container = document.querySelector('.searchContainer');
     }
 
+    // Display spinner
+    showSpinner() {
+        this.profile.innerHTML = `<div class="spinner"><img src="loader.gif" alt=""></div>`
+    }
+
     // Display profile
     showProfile(user) {
         this.profile.innerHTML = `
