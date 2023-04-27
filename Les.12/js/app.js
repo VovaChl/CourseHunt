@@ -16,13 +16,22 @@ searchInput.addEventListener('keyup', (e) => {
             .then(user => {
                 if(user.message === 'Not Found') {
                     // Show alert
-                    ui.showAlert(`User: ${userText} not found`, 'alert alert-danger')
+                    ui.showAlert(`User: ${userText} not found`, 'alert alert-danger');
+                    // Clear profile
+                    ui.clearProfile();
                 } else {
                     // Show profile
+                    ui.showProfile(user);
+                    ui.clearAlert();
                 }
+                
+                return user;
             })
+            .then(user => github.getRepos(user))
+            .then(repos => ui.showRepos(repos))
             .catch(err => console.log(err));
     } else {
         // Clear profile
+        ui.clearProfile();
     }
 });
