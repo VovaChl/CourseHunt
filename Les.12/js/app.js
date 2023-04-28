@@ -13,25 +13,40 @@ searchInput.addEventListener('keyup', (e) => {
     if(userText !== '') {
         // Make http request
         ui.showSpinner();
-        github.getUser(userText)
-            .then(user => {
-                if(user.message === 'Not Found') {
+        // github.getUser(userText)
+        //     .then(user => {
+        //         if(user.message === 'Not Found') {
+        //             // Show alert
+        //             ui.showAlert(`User: ${userText} not found`, 'alert alert-danger');
+        //             // Clear profile
+        //             ui.clearProfile();
+        //         } else {
+        //             // Show profile
+        //             ui.clearProfile();
+        //             ui.showProfile(user);
+        //             ui.clearAlert();
+        //         }
+                
+        //         return user;
+        //     })
+        //     .then(user => github.getRepos(user))
+        //     .then(repos => ui.showRepos(repos))
+        //     .catch(err => console.log(err));
+
+        github.getUserAsync(userText)
+            .then(info => {
+                if (info.userData.message === 'Not Found') {
                     // Show alert
-                    ui.showAlert(`User: ${userText} not found`, 'alert alert-danger');
-                    // Clear profile
-                    ui.clearProfile();
+                     ui.showAlert(`User: ${userText} not found`, 'alert alert-danger');
+                     // Clear profile
+                     ui.clearProfile();
                 } else {
-                    // Show profile
                     ui.clearProfile();
-                    ui.showProfile(user);
+                    ui.showProfile(info.userData);
+                    ui.showRepos(info.reposData);
                     ui.clearAlert();
                 }
-                
-                return user;
             })
-            .then(user => github.getRepos(user))
-            .then(repos => ui.showRepos(repos))
-            .catch(err => console.log(err));
     } else {
         // Clear profile
         ui.clearProfile();
