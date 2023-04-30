@@ -1,5 +1,5 @@
 $(function() {
-    $(".tabs").tabs();
+     $(".tabs").tabs();
 
     $('.owl-carousel').owlCarousel({
         loop:true,
