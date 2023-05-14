@@ -20,7 +20,7 @@ const Tasks = (function () {
         let searchResult = [];
 
         await tasks.forEach(task => {
-            if(task.text.indexOf(text) >= 0) {
+            if(task.text.toLowerCase().indexOf(text.toLowerCase()) >= 0) {
                 searchResult.push(task)
             }
         })
