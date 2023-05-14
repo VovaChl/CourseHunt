@@ -16,11 +16,32 @@ const Tasks = (function () {
         return tasks;
     }
 
+    const searchTasks = async function (text) {
+        let searchResult = [];
+
+        await tasks.forEach(task => {
+            if(task.text.indexOf(text) >= 0) {
+                searchResult.push(task)
+            }
+        })
+        
+        return searchResult;
+    }
+
     const addTask = async function (task) {
         task.id = id.generate();
         await tasks.unshift(task);
 
         return task;
+    }
+
+    const editTask = async function (id, newText) {
+         for (let i = 0; i < tasks.length; i++) {
+            if (tasks[i].id === id) {
+                tasks[i].text = newText;
+                break;
+            }
+        }
     }
 
     const removeTask = async function (id) {
@@ -34,9 +55,11 @@ const Tasks = (function () {
 
     const createInstance = function () {
         return {
+            searchTasks,
             getTasks,
             setTasks,
             addTask,
+            editTask,
             removeTask,
             removeAll
         }

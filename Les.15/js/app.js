@@ -11,14 +11,20 @@ const localstorage = Localstorage;
 const notification = Notification;
 
 // Init Observers
-const addTaskObserver = new EventObserver();
-const removeTaskObserver = new EventObserver();
-const removeAllTasksObserver = new EventObserver();
+let addTaskObserver  = new EventObserver(),
+    editTaskObserver  = new EventObserver(),
+    removeTaskObserver = new EventObserver(),
+    removeAllTasksObserver = new EventObserver();
+
 
 // Subscribe on tasks evt
 addTaskObserver.subscribe(localstorage.update);
 addTaskObserver.subscribe(notification.show);
 addTaskObserver.subscribe(ui.checkList);
+
+editTaskObserver.subscribe(localstorage.update);
+editTaskObserver.subscribe(notification.show);
+editTaskObserver.subscribe(ui.checkList);
 
 removeTaskObserver.subscribe(localstorage.update);
 removeTaskObserver.subscribe(notification.show);
@@ -29,6 +35,8 @@ removeAllTasksObserver.subscribe(notification.show);
 removeAllTasksObserver.subscribe(ui.checkList);
 
 // Init elements
+const searchForm = document.forms['searchTodoItem'];
+const searchInput = searchForm.elements['searchText'];
 const form = document.forms['addTodoItem'];
 const inputText = form.elements['todoText'];
 const ul = document.querySelector('.list-group');
@@ -48,11 +56,36 @@ window.addEventListener('load', function (e) {
 
 })
 
+searchForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (!searchInput.value) {
+        searchInput.classList.add('is-invalid');
+    } else {
+        ui.deleteAll();
+
+        tasks.searchTasks(searchInput.value)
+            .then((tasks) => tasks.forEach(task => ui.addTask(task)));
+    }
+})
+
+searchForm.addEventListener('reset', function (e) {
+    ui.deleteAll();
+
+    localstorage.getTasks().forEach(task => ui.addTask(task));
+})
+
+searchInput.addEventListener('keyup', function (e) { 
+    if (searchInput.value) {
+        searchInput.classList.remove('is-invalid');
+    }
+});
+
 form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     if (!inputText.value) {
-        // Show error, is-invalid
+        inputText.classList.add('is-invalid');
     } else {
         // let newTask = tasks.addTask({ text: inputText.value });
         // ui.addTask(newTask);
@@ -61,7 +94,14 @@ form.addEventListener('submit', function (e) {
         .then(() => addTaskObserver.fire({ 
             text: 'Новая задача добавлена успешно',
             class: 'alert alert-success' 
-        }));
+        }))
+        .then(() => form.reset());
+    }
+});
+
+inputText.addEventListener('keyup', function (e) { 
+    if (inputText.value) {
+        inputText.classList.remove('is-invalid');
     }
 });
 
@@ -75,6 +115,24 @@ ul.addEventListener('click', function(e) {
             class: 'alert alert-danger'
         }))
         }
+
+        if (e.target.classList.contains('edit-item')) {
+            e.target.classList.toggle('fa-save');
+            let id = e.target.closest('li').dataset.id;
+            let span = e.target.closest('li').querySelector('span');
+
+            if (e.target.classList.contains('fa-save')) {
+                span.setAttribute('contenteditable', true);
+                span.focus();
+            } else {
+                span.setAttribute('contenteditable', false);
+                span.blur();
+                tasks.editTask(id, span.textContent)
+                    .then(() => editTaskObserver.fire({
+                        text: 'Задача отредактирована успешно',
+                        class: 'alert alert-warning'
+                    }))
+            }}
 })
 
 clearBtn.addEventListener('click', function (e) {
