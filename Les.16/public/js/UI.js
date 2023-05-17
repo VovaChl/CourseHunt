@@ -31,28 +31,30 @@ class UI {
     }
 
     generateRooms(rooms) {
-        this.roomsList.insertAdjacentHTML("afterbegin", 
-        `<li><a href="#">Rooms list:</a></li>
-        <li><div class="divider"></div></li>`)
-        rooms.forEach(room => {
-            this.roomsList.insertAdjacentHTML("beforeend", UI.roomListTemplate(room))
+        this.roomsList.innerHTML ='';
+
+        rooms.forEach((room, index) => {
+            this.roomsList.insertAdjacentHTML("beforeend", UI.roomListTemplate(room, index))
         })
     }
 
     generateUsersInRoom(users) {
         this.userList.innerHTML ='';
-        for (let user in users) {
-            this.userList.insertAdjacentHTML("beforeend", UI.userListTemplate(user, users[user.id]))
-        }
+        
+        users.forEach((user) => this.userList.insertAdjacentHTML("beforeend", UI.userListTemplate(user)));
+
+        // for (let user in users) {
+        //     this.userList.insertAdjacentHTML("beforeend", UI.userListTemplate(user, users[user.id]))
+        // }
     }
 
     addMessage(message) {
         let className = this.getClass(message);
-        this.messageContainer.insertAdjacentHTML("beforeend", UI.messageTemplate(message, className))
+        this.messageContainer.insertAdjacentHTML("beforeend", UI.messageTemplate(message, className));
     }
 
     newUserJoin(name) {
-        this.messageContainer.insertAdjacentHTML("beforeend", UI.newUserJoinTemplate(name))
+        this.messageContainer.insertAdjacentHTML("beforeend", UI.newUserJoinTemplate(name));
     }
 
     getClass(data) {
@@ -70,13 +72,13 @@ class UI {
         }
     }
 
-    static roomListTemplate(room) {
+    static roomListTemplate(room,index) {
         return `
-            <li><a href="#" class="waves-effect">${room}</a></li>
+            <li><a href="#" class="waves-effect" data-room-index="${index}">${room}</a></li>
         `;
     }
 
-    static userListTemplate(name, id) {
+    static userListTemplate({name, id}) {
         return `
             <li class="collection-item" data-user-id="${id}">${name}</li>
         `;
@@ -110,13 +112,10 @@ class UI {
                 
                     <div class="card-content white-text">
                         <p class="black-text">${hours}:${minutes}:${seconds}</p>
-                        <p>New user: ${name} joined chat</p>
+                        <h6>User ${name} joined chat</h6>
                     </div>
            </div>
         `;
     }
-
-
-
 
 }
