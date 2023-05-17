@@ -63,12 +63,14 @@ socket.on('chat message', message => { ui.addMessage(message) });
 socket.on('new user joined', user => { ui.newUserJoin(user) });
 
 socket.on('roommates', ({usernames}) => {
-    let usersArray = Object.keys(usernames)
+    let users = Object.keys(usernames)
     .filter(user => usernames[user].room === currentRoom)
     .map( user => {
         usernames[user].name = user;
         return usernames[user];
     });
 
-    ui.generateUsersInRoom(usersArray);
+    ui.generateUsersInRoom(users);
 });
+
+socket.on('has left the room', user => { ui.userLeft(user)  });

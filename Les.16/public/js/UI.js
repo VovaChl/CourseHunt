@@ -57,6 +57,10 @@ class UI {
         this.messageContainer.insertAdjacentHTML("beforeend", UI.newUserJoinTemplate(name));
     }
 
+    userLeft(name) {
+        this.messageContainer.insertAdjacentHTML("beforeend", UI.userLeftTemplate(name));
+    }
+
     getClass(data) {
         let iam = this.user.getUser();
         if (data.username === iam.username){
@@ -113,6 +117,22 @@ class UI {
                     <div class="card-content white-text">
                         <p class="black-text">${hours}:${minutes}:${seconds}</p>
                         <h6>User ${name} joined chat</h6>
+                    </div>
+           </div>
+        `;
+    }
+
+    static userLeftTemplate(name) {
+        let date = new Date();
+        let hours = date.getHours() > 10 ? date.getHours() : '0' + date.getHours();
+        let minutes = date.getMinutes()> 10 ? date.getMinutes() : '0' + date.getMinutes();
+        let seconds = date.getSeconds()> 10 ? date.getSeconds() : '0' + date.getSeconds();
+        return `
+            <div class="card teal lighten-2">
+                
+                    <div class="card-content white-text">
+                        <p class="black-text">${hours}:${minutes}:${seconds}</p>
+                        <h6>User ${name} left the room</h6>
                     </div>
            </div>
         `;
