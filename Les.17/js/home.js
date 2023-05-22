@@ -7,7 +7,8 @@ const projects = new Projects();
  // Init homeUI
 const ui = new HomeUI();
 
-//
+// Init auth
+const auth = new Auth();
 
 // Init elements
 const signout = document.querySelector('.sign-out');
