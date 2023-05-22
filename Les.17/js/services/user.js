@@ -3,18 +3,18 @@ const User = (function () {
     let currentUser;
     let instance;
 
-    const getUser = async function() {
-        await firebase.auth().onAuthStateChanged(function(user) {
-            if (user) currentUser = user;
-            else currentUser = false;
-
-            return currentUser;
-        });
+    const getUser =  function() {
+        return currentUser;
     };
+
+    const setUser = async function (user) {
+        return currentUser = user;
+    }
 
     const createInstance = function () {
         return {
-            getUser
+            getUser,
+            setUser
         }
     }
 
