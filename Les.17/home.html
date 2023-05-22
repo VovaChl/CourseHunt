@@ -16,7 +16,7 @@
 <main class="mt-5">
     <section class="add-new-project mb-5">
         <div class="container">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProject">Add new project</button>
+            <button type="button" class="btn btn-primary add-btn" data-toggle="modal" data-target="#addProject">Add new project</button>
         </div>
     </section>
     <section class="projects-list-wrapper">
@@ -29,7 +29,7 @@
 </main>
 
 
-<!--Modal-->
+<!--Add Modal-->
 <div class="modal fade" id="addProject" tabindex="-1" role="dialog" aria-labelledby="addProject" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -62,6 +62,45 @@
                         <input type="text" class="form-control" name="projectImg" id="projectImg">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Add project</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Edit modal-->
+<div class="modal fade" id="editProject" tabindex="-1" role="dialog" aria-labelledby="editProject" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="edit-project-form">
+                    <div class="form-group">
+                        <label for="projectName">Project name</label>
+                        <input type="text" class="form-control" name="projectName" id="projectName">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDescription">Project description</label>
+                        <input type="text" class="form-control" name="projectDescription" id="projectDescription">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectPrice">Project price</label>
+                        <input type="text" class="form-control" name="projectPrice" id="projectPrice">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectAmount">Project amount</label>
+                        <input type="text" class="form-control" name="projectAmount" id="projectAmount">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectImg">Project img</label>
+                        <input type="text" class="form-control" name="projectImg" id="projectImg">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Edit project</button>
                 </form>
             </div>
         </div>
